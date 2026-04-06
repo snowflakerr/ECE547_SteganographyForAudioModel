@@ -1,0 +1,8 @@
+.venv/
+coqui_project/.venv/
+__pycache__/
+*.pyc
+.venv/
+coqui_project/.venv/
+__pycache__/
+*.pyc
