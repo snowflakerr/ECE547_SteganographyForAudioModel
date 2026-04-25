@@ -5,24 +5,6 @@ Watermark embedding pipeline for existing audio files (music, speech, any .wav).
 
 Unlike the TTS pipeline, there is no synthesis step — the neural injector
 runs entirely post-hoc on loaded audio.
-
-Usage
------
-    from config import Config
-    from watermark_net import WatermarkSystem
-    from music_pipe import MusicWatermarkPipeline
-
-    cfg    = Config.default()
-    system = WatermarkSystem(cfg)
-    # ... load checkpoint ...
-
-    pipe   = MusicWatermarkPipeline(system, cfg)
-    result = pipe.embed_file(
-        in_path  = "song.wav",
-        out_path = "song_wm.wav",
-        sign     = [5, 2, 14, 0],
-    )
-    print(result)
 """
 
 from __future__ import annotations

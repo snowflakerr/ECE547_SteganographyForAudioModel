@@ -2,7 +2,6 @@
 config.py
 =========
 Centralised configuration dataclasses for the TraceableSpeech pipeline.
-All hyperparameters live here; nothing is scattered across files.
 """
 
 from __future__ import annotations

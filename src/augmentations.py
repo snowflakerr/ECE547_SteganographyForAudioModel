@@ -3,12 +3,6 @@ augmentations.py
 ================
 Stochastic augmentation / attack pipeline used during watermark training.
 
-All bugs present in the original TraceableSpeech code are fixed:
-  1. UnboundLocalError on Opera — a safe fallback is always set.
-  2. MF-3 median filter — original collapsed to a scalar; fixed with unfold.
-  3. Temporal clip — original could produce negative slice indices; fixed
-     to always cut a contiguous segment with a guaranteed valid start pos.
-
 All attacks operate on waveform tensors of shape [B, C, T]  (float32, ±1).
 
 Usage
@@ -17,7 +11,6 @@ Usage
     pipeline = AugmentationPipeline(cfg, sample_rate=24_000)
     attacked, op_name = pipeline(waveform)
 
-    # Or apply a specific attack by name:
     attacked = pipeline.apply("Noise-W35", waveform)
 """
 

@@ -5,26 +5,6 @@ Watermark detection and decoding from audio files or waveform tensors.
 
 Provides per-symbol confidence scores so the caller can decide whether
 a detected payload meets a threshold before trusting it.
-
-Usage
------
-    from config import Config
-    from watermark_net import WatermarkSystem
-    from detector import WatermarkDetector
-
-    cfg     = Config.default()
-    system  = WatermarkSystem(cfg)
-    # ... load checkpoint ...
-
-    detector = WatermarkDetector(system, cfg)
-
-    result = detector.detect_file("speech.wav")
-    if result.is_confident(threshold=0.6):
-        print("Detected payload:", result.sign)
-    else:
-        print("Low-confidence detection")
-
-    detector.print_result(result)
 """
 
 from __future__ import annotations

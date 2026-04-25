@@ -7,7 +7,6 @@ Inspired by TraceableSpeec src code https://github.com/zjzser/TraceableSpeech
 Run with:
     pytest tests/test_pipeline.py -v
 
-All tests use synthetic audio — no real files or GPU needed.
 Tests are grouped into:
   - Unit: individual components in isolation.
   - Integration: components wired together.

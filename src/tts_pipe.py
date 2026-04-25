@@ -8,25 +8,7 @@ The pipeline:
   2. Runs the waveform through WaveformInjector, conditioned on a watermark ID.
   3. Saves the watermarked audio and returns it alongside metadata.
 
-Usage
------
-    from config import Config
-    from watermark_net import WatermarkSystem
-    from audio_utils import MelExtractor
-    from tts_pipe import WatermarkedTTSPipeline
-
-    cfg    = Config.default()
-    system = WatermarkSystem(cfg)
-    # ... load checkpoint into system ...
-
-    pipe = WatermarkedTTSPipeline(system, cfg)
-    result = pipe.synthesise(
-        text    = "Hello, world.",
-        sign    = [3, 7, 1, 12],          # explicit watermark ID (optional)
-        out_path= "hello.wav",
-    )
-    print(result.sign, result.duration_s)
-"""
+  """
 
 from __future__ import annotations
 

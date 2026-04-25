@@ -13,17 +13,6 @@ For each batch of clean audio waveforms:
   5. WatermarkDecoder recovers the payload from the attacked mel spectrogram.
   6. Total loss = λ_wm · sign_loss  +  λ_recon · L1(watermarked, clean)  +  λ_mel · L1(mel_wm, mel_clean)
 
-Usage
------
-    cfg     = Config.default()
-    system  = WatermarkSystem(cfg)
-    mel     = MelExtractor(cfg.audio)
-    aug     = AugmentationPipeline(cfg.augmentation, cfg.audio.sample_rate)
-    dataset = AudioDataset("data/train", sample_rate=cfg.audio.sample_rate)
-    loader  = DataLoader(dataset, batch_size=cfg.training.batch_size, shuffle=True)
-
-    trainer = WatermarkTrainer(system, mel, aug, cfg)
-    trainer.train(loader)
 """
 
 from __future__ import annotations
