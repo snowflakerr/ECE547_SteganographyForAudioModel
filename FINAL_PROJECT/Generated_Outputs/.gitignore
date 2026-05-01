@@ -1,0 +1,8 @@
+*
+!.gitignore
+!User_Version/
+!Developer_Version/
+!Uploaded_References/
+!User_Version/.gitkeep
+!Developer_Version/.gitkeep
+!Uploaded_References/.gitkeep

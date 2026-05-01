@@ -1,0 +1,22 @@
+.DS_Store
+**/.DS_Store
+
+# Local Python environments
+**/.venv/
+
+# Generated Python/tool caches
+**/__pycache__/
+**/.pytest_cache/
+**/.matplotlib_cache/
+*.py[cod]
+
+# Generated app outputs live here during demos.
+# Keep the folder skeleton, not generated WAVs/records.
+Generated_Outputs/*
+!Generated_Outputs/.gitignore
+!Generated_Outputs/User_Version/
+!Generated_Outputs/Developer_Version/
+!Generated_Outputs/Uploaded_References/
+!Generated_Outputs/User_Version/.gitkeep
+!Generated_Outputs/Developer_Version/.gitkeep
+!Generated_Outputs/Uploaded_References/.gitkeep
