@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.py[cod]
+.streamlit/
+.matplotlib_cache/
+outputs/
+.DS_Store

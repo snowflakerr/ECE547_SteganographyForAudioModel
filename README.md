@@ -1,45 +1,73 @@
-# Audio Watermarking for Voice Generation
+# TeamSteganography Final Project
 
-## What this project does
-This project explores how to watermark the **audio output** of an open-source voice generation model for a security engineering class.
+This final project contains a Coqui XTTS voice-generation demo, a developer
+watermarking demo, a watermark checker, and Aaron's attack recordings.
 
-The idea is:
-- generate speech with an open-source TTS model
-- embed a watermark into the generated audio
-- test whether the watermark can still be detected after edits like compression, noise, trimming, or resampling
+## Folder Layout
 
-We are focusing on **output watermarking**, not watermarking the model weights.
+```text
+FINAL_PROJECT/
+  User_Version/          User-facing voice generator
+  Developer_Version/     Transparent developer/demo version
+  Watermark_Checker/     Developer tool for decoding payload IDs
+  Attack_Outputs/        Aaron's recorded attack samples
+  Generated_Outputs/     Shared generated audio and records
+```
 
-## Main tools
-- **Coqui TTS / XTTS v2** for voice generation
-- **Custom watermarking pipeline** for watermark embedding and detection
+`Generated_Outputs/` is intentionally shared by both generators so the checker
+can read one predictable place for records.
 
-## Dependencies
-- Python 3.11
-- coqui-tts
-- torch
-- torchaudio
-- torchcodec
-- transformers
-- ffmpeg
-- git
+## Setup
 
-## Main links
-- **Coqui TTS GitHub:** https://github.com/coqui-ai/TTS
-- **Coqui TTS docs:** https://coqui-tts.readthedocs.io/
-- **PyTorch:** https://pytorch.org/
-- **FFmpeg:** https://ffmpeg.org/
+Use one shared virtual environment from this folder:
 
-## Reference papers
-- [1] F. Kreuk, Y. Adi, B. Raj, R. Singh, and J. Keshet, “Hide and Speak: Towards Deep Neural Networks for Speech Steganography,” arXiv preprint arXiv:1902.03083, 2020. [Online]. Available: https://arxiv.org/abs/1902.03083
-- [2] Y. Wen, A. Innuganti, A. B. Ramos, H. Guo, and Q. Yan, “SoK: How Robust is Audio Watermarking in Generative AI Models?,” arXiv preprint arXiv:2503.19176, 2025. [Online]. Available: https://arxiv.org/abs/2503.19176
-- [3] Y. Wang, Z. Chen, X. Zhang, and H. Li, “TraceableSpeech: Towards Proactively Traceable Text-to-Speech with Watermarking,” arXiv preprint arXiv:2406.04840, 2024. [Online]. Available: https://arxiv.org/abs/2406.04840
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-## Current goal
-Build a working pipeline that:
-1. generates speech
-2. watermarks the generated audio
-3. tests whether the watermark survives realistic modifications
+The first Coqui XTTS run may download model files.
+
+## Run The Apps
+
+User-facing generator:
+
+```bash
+source .venv/bin/activate
+cd FINAL_PROJECT/User_Version
+streamlit run app.py
+```
+
+Developer generator:
+
+```bash
+source .venv/bin/activate
+cd FINAL_PROJECT/Developer_Version
+streamlit run app.py
+```
+
+Watermark checker:
+
+```bash
+source .venv/bin/activate
+cd FINAL_PROJECT/Watermark_Checker
+streamlit run app.py
+```
+
+## Demo Flow
+
+1. Generate audio in `User_Version` or `Developer_Version`.
+2. Open `Watermark_Checker`.
+3. Upload the generated `.wav`.
+4. Choose the matching generation records source.
+5. Confirm the decoded payload matches a known record.
+
+Aaron's attack files are in `FINAL_PROJECT/Attack_Outputs/` and can be uploaded
+directly into `Watermark_Checker` during the demo.
 
 ## Notes
-This repository does **not** track the Python virtual environment. Use the dependency list above to recreate the environment locally.
+
+- Do not copy virtual environment folders into the final subfolders.
+- Generated WAVs and record files are written under `FINAL_PROJECT/Generated_Outputs/`.
+- The user-facing app intentionally does not mention watermarking.

@@ -1,8 +1,7 @@
+.DS_Store
+**/.DS_Store
 .venv/
-coqui_project/.venv/
-__pycache__/
-*.pyc
-.venv/
-coqui_project/.venv/
-__pycache__/
-*.pyc
+**/__pycache__/
+**/.pytest_cache/
+**/.matplotlib_cache/
+*.py[cod]

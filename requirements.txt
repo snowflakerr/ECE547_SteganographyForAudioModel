@@ -1,0 +1,12 @@
+coqui-tts>=0.27
+numpy>=1.26
+pandas>=2.0
+plotly>=5.20
+pytest>=8.0
+scipy>=1.11
+soundfile>=0.12
+streamlit>=1.34
+torch>=2.3
+torchaudio>=2.3
+torchcodec>=0.8
+transformers>=4.57,<5
