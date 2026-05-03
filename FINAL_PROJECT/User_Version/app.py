@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 import tempfile
 from datetime import datetime
@@ -19,9 +18,7 @@ VOICE_DIR = ROOT / "coqui_project" / "voices"
 DEFAULT_REFERENCE = ROOT / "coqui_project" / "reference.wav"
 OUTPUT_DIR = ROOT.parent / "Generated_Outputs" / "User_Version"
 UPLOAD_DIR = ROOT.parent / "Generated_Outputs" / "Uploaded_References" / "User_Version"
-RECORD_PATH = OUTPUT_DIR / ".generation_records.jsonl"
 MODEL_NAME = "tts_models/multilingual/multi-dataset/xtts_v2"
-ENCODER_VERSION = "fsk-tail-v2"
 
 os.environ.setdefault("MPLCONFIGDIR", str(ROOT / ".matplotlib_cache"))
 os.environ.setdefault("VOICE_STUDIO_KEY", "voice_studio_private_key")
@@ -73,22 +70,6 @@ def output_id(text: str, voice_name: str, stamp: str) -> int:
     """Create a deterministic-looking 32-bit ID for this generated file."""
     digest = hashlib.sha256(f"{voice_name}:{stamp}:{text}".encode("utf-8")).digest()
     return int.from_bytes(digest[:4], "little")
-
-
-def record_generation(path: Path, voice_name: str, language: str, text: str, item_id: int) -> None:
-    """Append the metadata the checker uses to prove a generated file matches."""
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    row = {
-        "created_at": datetime.now().isoformat(timespec="seconds"),
-        "file": path.name,
-        "voice": voice_name,
-        "language": language,
-        "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-        "output_id": item_id,
-        "encoder_version": ENCODER_VERSION,
-    }
-    with RECORD_PATH.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(row) + "\n")
 
 
 def main() -> None:
@@ -172,7 +153,6 @@ def main() -> None:
                 final_audio = processor.process(generated, item_id, SAMPLE_RATE)
                 output_path = OUTPUT_DIR / f"generated_audio_{stamp}.wav"
                 audio_bytes = save_wav(output_path, final_audio)
-                record_generation(output_path, voice_name, language, text, item_id)
 
             st.audio(audio_bytes, format="audio/wav")
             st.download_button("Download Audio", audio_bytes, output_path.name, "audio/wav")
