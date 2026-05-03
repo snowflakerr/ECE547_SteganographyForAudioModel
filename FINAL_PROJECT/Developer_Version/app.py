@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 import tempfile
 from datetime import datetime
@@ -12,7 +11,7 @@ import plotly.graph_objects as go
 import soundfile as sf
 import streamlit as st
 
-from audio_engine import OutputProcessor, SAMPLE_RATE, save_wav
+from audio_engine import ENCODER_VERSION, OutputProcessor, SAMPLE_RATE, save_wav
 
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
@@ -20,11 +19,9 @@ SRC = ROOT / "src"
 
 OUT_DIR = ROOT.parent / "Generated_Outputs" / "Developer_Version"
 UPLOAD_DIR = ROOT.parent / "Generated_Outputs" / "Uploaded_References" / "Developer_Version"
-RECORD_PATH = OUT_DIR / ".generation_records.jsonl"
 VOICE_DIR = ROOT / "coqui_project" / "voices"
 DEFAULT_REFERENCE = ROOT / "coqui_project" / "reference.wav"
 XTTS_MODEL = "tts_models/multilingual/multi-dataset/xtts_v2"
-ENCODER_VERSION = "fsk-tail-v2"
 
 os.environ.setdefault("VOICE_STUDIO_KEY", "voice_studio_private_key")
 
@@ -121,34 +118,6 @@ def waveform_plot(clean: np.ndarray, watermarked: np.ndarray) -> go.Figure:
     return fig
 
 
-def record_generation(
-    path: Path,
-    voice_label: str,
-    language: str,
-    text: str,
-    payload: int,
-    payload_mode: str,
-    secret_key: str,
-    strength: float,
-) -> None:
-    """Append generation metadata so Watermark_Checker can verify this file."""
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    row = {
-        "created_at": datetime.now().isoformat(timespec="seconds"),
-        "file": path.name,
-        "voice": voice_label,
-        "language": language,
-        "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-        "output_id": payload,
-        "payload_mode": payload_mode,
-        "encoder_version": ENCODER_VERSION,
-        "secret_key_sha256": hashlib.sha256(secret_key.encode("utf-8")).hexdigest(),
-        "strength": strength,
-    }
-    with RECORD_PATH.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(row) + "\n")
-
-
 def main() -> None:
     st.set_page_config(page_title="Voice Watermark Studio", layout="wide")
     st.markdown(
@@ -237,8 +206,8 @@ def main() -> None:
                     payload = int(manual_payload) if payload_mode == "Manual" else make_payload(text, voice_label)
 
                     # Developer_Version is transparent about this step. It uses
-                    # the same fsk-tail-v2 encoder as User_Version so one
-                    # checker can verify outputs from either app.
+                    # the same STFT spread-spectrum encoder as User_Version so
+                    # one checker can verify outputs from either app.
                     processor = OutputProcessor(secret_key=secret_key, strength=alpha, bits=32)
                     watermarked = processor.process(clean, payload, SAMPLE_RATE)
 
@@ -247,7 +216,6 @@ def main() -> None:
                     wm_path = OUT_DIR / f"voice_watermarked_{stamp}.wav"
                     clean_bytes = save_wav(clean_path, clean)
                     wm_bytes = save_wav(wm_path, watermarked)
-                    record_generation(wm_path, voice_label, language, text, payload, payload_mode, secret_key, alpha)
 
                 metric_cols = st.columns(3)
                 metric_cols[0].metric("Payload", str(payload))
